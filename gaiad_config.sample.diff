@@ -1,0 +1,145 @@
+diff --git a/config/app.toml b/config/app.toml
+index 60349a4..68798fd 100644
+--- a/config/app.toml
++++ b/config/app.toml
+@@ -8,7 +8,7 @@
+ # The minimum gas prices a validator is willing to accept for processing a
+ # transaction. A transaction's fees must meet the minimum of any denomination
+ # specified in this config (e.g. 0.25token1,0.0001token2).
+-minimum-gas-prices = ""
++minimum-gas-prices = "0stake"
+
+ # The maximum gas a query coming over rest/grpc may consume.
+ # If this is set to zero, the query can consume an unbounded amount of gas.
+@@ -160,7 +160,7 @@ enabled-unsafe-cors = false
+ enable = true
+
+ # Address defines the gRPC server address to bind to.
+-address = "localhost:9090"
++address = "0.0.0.0:9090"
+
+ # MaxRecvMsgSize defines the max message size in bytes the server can receive.
+ # The default value is 10MB.
+diff --git a/config/config.toml b/config/config.toml
+index 65ebedd..c15120a 100644
+--- a/config/config.toml
++++ b/config/config.toml
+@@ -87,7 +87,7 @@ filter_peers = false
+ [rpc]
+
+ # TCP or UNIX socket address for the RPC server to listen on
+-laddr = "tcp://127.0.0.1:26657"
++laddr = "tcp://0.0.0.0:26657"
+
+ # A list of origins a cross-domain request can be executed from
+ # Default value '[]' disables cors support
+@@ -102,7 +102,7 @@ cors_allowed_headers = ["Origin", "Accept", "Content-Type", "X-Requested-With",
+
+ # TCP or UNIX socket address for the gRPC server to listen on
+ # NOTE: This server only supports /broadcast_tx_commit
+-grpc_laddr = ""
++grpc_laddr = "tcp://0.0.0.0:26658"
+
+ # Maximum number of simultaneous connections.
+ # Does not include RPC (HTTP&WebSocket) connections. See max_open_connections
+@@ -195,7 +195,7 @@ tls_cert_file = ""
+ tls_key_file = ""
+
+ # pprof listen address (https://golang.org/pkg/net/http/pprof)
+-pprof_laddr = "localhost:6060"
++pprof_laddr = "0.0.0.0:6060"
+
+ #######################################################
+ ###           P2P Configuration Options             ###
+@@ -214,7 +214,7 @@ external_address = ""
+ seeds = ""
+
+ # Comma separated list of nodes to keep persistent connections to
+-persistent_peers = ""
++persistent_peers = "0538f8bb7a853f89e38064db0b5f77e52238a912@18.183.50.195:26656"
+
+ # Path to address book
+ addr_book_file = "config/addrbook.json"
+@@ -236,19 +236,19 @@ unconditional_peer_ids = ""
+ persistent_peers_max_dial_period = "0s"
+
+ # Time to wait before flushing messages out on the connection
+-flush_throttle_timeout = "100ms"
++flush_throttle_timeout = "0ms"
+
+ # Maximum size of a message packet payload, in bytes
+-max_packet_msg_payload_size = 1024
++max_packet_msg_payload_size = 10240
+
+ # Rate at which packets can be sent, in bytes/second
+-send_rate = 5120000
++send_rate = 512000000
+
+ # Rate at which packets can be received, in bytes/second
+-recv_rate = 5120000
++recv_rate = 512000000
+
+ # Set true to enable the peer-exchange reactor
+-pex = true
++pex = false
+
+ # Seed mode, in which node constantly crawls the network and looks for
+ # peers. If another node asks it for addresses, it responds and disconnects.
+@@ -286,7 +286,7 @@ type = "flood"
+ # Since a block affects the application state, some transactions in the
+ # mempool may become invalid. If this does not apply to your application,
+ # you can disable rechecking.
+-recheck = true
++recheck = false
+
+ # recheck_timeout is the time the application has during the rechecking process
+ # to return CheckTx responses, once all requests have been sent. Responses that
+@@ -304,7 +304,7 @@ recheck_timeout = "1s"
+ # from relaying transactions to other peers until they are included in a
+ # block. In other words, if Broadcast is disabled, only the peer you send
+ # the tx to will see it until it is included in a block.
+-broadcast = true
++broadcast = false
+
+ # WalPath (default: "") configures the location of the Write Ahead Log
+ # (WAL) for the mempool. The WAL is disabled by default. To enable, set
+@@ -409,21 +409,21 @@ version = "v0"
+ wal_file = "data/cs.wal/wal"
+
+ # How long we wait for a proposal block before prevoting nil
+-timeout_propose = "3s"
++timeout_propose = "500ms"
+ # How much timeout_propose increases with each round
+-timeout_propose_delta = "500ms"
++timeout_propose_delta = "0ms"
+ # How long we wait after receiving +2/3 prevotes for “anything” (ie. not a single block or nil)
+-timeout_prevote = "1s"
++timeout_prevote = "0ms"
+ # How much the timeout_prevote increases with each round
+-timeout_prevote_delta = "500ms"
++timeout_prevote_delta = "0ms"
+ # How long we wait after receiving +2/3 precommits for “anything” (ie. not a single block or nil)
+-timeout_precommit = "1s"
++timeout_precommit = "0ms"
+ # How much the timeout_precommit increases with each round
+-timeout_precommit_delta = "500ms"
++timeout_precommit_delta = "0ms"
+ # How long we wait after committing a block, before starting on the new
+ # height (this gives us a chance to receive some more precommits, even
+ # though we already have +2/3).
+-timeout_commit = "5s"
++timeout_commit = "412ms"
+
+ # How many blocks to look back to check existence of the node's consensus votes before joining consensus
+ # When non-zero, the node will panic upon restart
+@@ -439,8 +439,8 @@ create_empty_blocks = true
+ create_empty_blocks_interval = "0s"
+
+ # Reactor sleep duration parameters
+-peer_gossip_sleep_duration = "100ms"
+-peer_query_maj23_sleep_duration = "2s"
++peer_gossip_sleep_duration = "0ms"
++peer_query_maj23_sleep_duration = "100ms"
+
+ #######################################################
+ ###         Storage Configuration Options           ###
